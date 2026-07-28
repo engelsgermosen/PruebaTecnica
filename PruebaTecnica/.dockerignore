@@ -1,0 +1,11 @@
+**/bin
+**/obj
+**/.vs
+**/.vscode
+**/.claude
+**/*.user
+**/appsettings.Development.json
+Dockerfile
+.dockerignore
+.gitignore
+session.md

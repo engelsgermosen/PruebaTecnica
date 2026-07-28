@@ -1,0 +1,167 @@
+# ============================================
+# .NET & Visual Studio build artifacts
+# ============================================
+bin/
+obj/
+out/
+TestResults/
+[Bb]uild[Ll]og.*
+*.dbmdl
+*.bak
+*.log
+*.tlog
+*.lastcodeanalysissucceeded
+*.userosscache
+*.suo
+*.user
+*.userprefs
+*.vs/
+*.ncrunch*
+*.vspscc
+*.vssscc
+*.tmp
+*.cache
+*.pdb
+*.mdb
+*.opendb
+*.projdata
+*.psess
+*.vsp
+*.vspx
+*.coverage
+*.coveragexml
+
+# ============================================
+# Entity Framework / Migrations / SQLite
+# ============================================
+Migrations/
+*.sqlite
+*.db
+*.mdf
+*.ldf
+*.ndf
+*.sqlproj.user
+*.sql
+
+# ============================================
+# Environment / Configuration
+# ============================================
+.env
+.env.*
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.local.json
+secrets.json
+launchSettings.json
+
+# Importante: NO ignores appsettings.json
+#appsettings.json
+
+# ============================================
+# IDEs / Editors
+# ============================================
+.vscode/
+.idea/
+*.DotSettings.user
+*.ReSharper/
+_ReSharper*/
+*.sln.iml
+
+# ============================================
+# Logs / Dumps
+# ============================================
+*.log
+logs/
+log/
+*.dmp
+*.stackdump
+
+# ============================================
+# Test / Coverage
+# ============================================
+coverage/
+coverage.cobertura.xml
+coverage.xml
+lcov.info
+BenchmarkDotNet.Artifacts/
+
+# ============================================
+# Node / Frontend (si aplica)
+# ============================================
+ClientApp/node_modules/
+ClientApp/dist/
+ClientApp/build/
+ClientApp/.next/
+ClientApp/.nuxt/
+ClientApp/.cache/
+ClientApp/.angular/
+ClientApp/.eslintcache
+ClientApp/.env.local
+ClientApp/.env.development
+ClientApp/.env.production
+
+# ============================================
+# Docker (opcional, solo si no lo usas)
+# ============================================
+#Dockerfile
+#docker-compose.yml
+#docker-compose.override.yml
+#docker-compose*.override.yml
+#.dockerignore
+
+# ============================================
+# OS generated files
+# ============================================
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# ============================================
+# Visual Studio Code config
+# ============================================
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+.vsconfig
+
+# ============================================
+# Publish output
+# ============================================
+publish/
+artifacts/
+packages/
+*.publishsettings
+*.pubxml
+*.pubxml.user
+
+# ============================================
+# Temp / cache
+# ============================================
+tmp/
+temp/
+.cache/
+__pycache__/
+*.swp
+*.swo
+*.bak
+*.tmp
+*.old
+*.orig
+
+# ============================================
+# Secrets / Keys
+# ============================================
+*.key
+*.pem
+*.crt
+*.pfx
+*.cer
+*.csr
+*.snk
+Secrets/
+keys/
+certs/

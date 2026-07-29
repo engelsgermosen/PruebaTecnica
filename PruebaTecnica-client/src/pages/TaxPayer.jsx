@@ -95,12 +95,8 @@ const TaxPayer = () => {
               receiptCount={taxPayer.taxReceipts?.length || 0}
             />
 
-            {/* Lista de comprobantes fiscales */}
-            <TaxReceiptsList
-              receipts={taxPayer.taxReceipts || []}
-              loading={false}
-              rncIdentification={rncIdentification}
-            />
+            {/* Lista de comprobantes fiscales (misma fuente que el total de arriba) */}
+            <TaxReceiptsList receipts={taxPayer.taxReceipts || []} loading={false} />
           </div>
         ) : (
           <div className="rounded-2xl border border-slate-200 bg-white px-6 py-12 text-center shadow-sm sm:py-16">

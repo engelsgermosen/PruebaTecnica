@@ -24,6 +24,9 @@ namespace PruebaTecnica.Infrastructure.Persistence.Seeds
                 new TaxPayer { Id = "101023456", Name = "Distribuidora Nacional SRL", Status = true, TaxPayerTypeId = juridica.Id },
                 new TaxPayer { Id = "130456789", Name = "Ferreteria El Constructor EIRL", Status = true, TaxPayerTypeId = juridica.Id },
                 new TaxPayer { Id = "00112345678", Name = "Juan Alberto Perez Rodriguez", Status = true, TaxPayerTypeId = fisica.Id },
+
+                // Caso verificable del PDF: sus dos comprobantes suman ITBIS = 216.00 (ver DefaultTaxReceipts).
+                new TaxPayer { Id = "98754321012", Name = "JUAN PEREZ", Status = true, TaxPayerTypeId = fisica.Id },
             };
 
             foreach (var taxPayer in defaultTaxPayers)

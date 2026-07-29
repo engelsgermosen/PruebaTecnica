@@ -73,6 +73,45 @@ namespace PruebaTecnica.Infrastructure.Persistence.Seeds
                 receipt.CreatedAt = new DateTime(year, spec.Month, 15);
                 await context.SaveChangesAsync();
             }
+
+            // -----------------------------------------------------------------------------
+            // Caso verificable del PDF: el contribuyente 98754321012 ("JUAN PEREZ") tiene dos
+            // comprobantes de monto 200.00 (ITBIS 36.00) y 1000.00 (ITBIS 180.00), de modo que
+            // la suma total de su ITBIS es exactamente 216.00. Los montos se derivan de lineas
+            // de producto (misma logica que el handler) y los NCF continuan la MISMA secuencia
+            // por tipo (B01), sin romper los correlativos ya generados arriba.
+            // -----------------------------------------------------------------------------
+            var pdfTaxPayer = taxPayers.FirstOrDefault(x => x.Id == "98754321012");
+            if (pdfTaxPayer != null)
+            {
+                var pdfSpecs = new (NcfType Type, int Month, (string Product, int Quantity)[] Lines)[]
+                {
+                    (NcfType.B01, 5, new[] { ("Servicio de mensajeria local", 1) }),   // 200.00  -> ITBIS 36.00
+                    (NcfType.B01, 8, new[] { ("Servicio de consultoria (hora)", 1) }), // 1000.00 -> ITBIS 180.00
+                };
+
+                foreach (var spec in pdfSpecs)
+                {
+                    var receipt = new TaxReceipt
+                    {
+                        RncIdentification = pdfTaxPayer.Id
+                    };
+
+                    foreach (var line in spec.Lines)
+                    {
+                        receipt.AddDetail(Prod(line.Product), line.Quantity);
+                    }
+
+                    receipt.CalculateTotals();
+                    receipt.Ncf = await ncfSequenceRepository.GenerateNextNcf(spec.Type.ToString());
+
+                    context.TaxReceipts.Add(receipt);
+                    await context.SaveChangesAsync(); // estampa CreatedAt = ahora
+
+                    receipt.CreatedAt = new DateTime(year, spec.Month, 15);
+                    await context.SaveChangesAsync();
+                }
+            }
         }
     }
 }

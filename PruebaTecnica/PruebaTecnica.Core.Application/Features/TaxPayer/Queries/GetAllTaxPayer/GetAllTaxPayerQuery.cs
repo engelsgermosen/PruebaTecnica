@@ -64,12 +64,11 @@ namespace PruebaTecnica.Core.Application.Features.TaxPayer.Queries.GetAllTaxPaye
 
             var response = new PagedResponse<TaxPayerDto>();
 
-            // Si no hay paginacion, devuelvo los ultimos 150 registros
+            // Sin paginacion -> listado completo de todos los contribuyentes
             if (request.Page is null || request.PageSize is null || request.PageSize <= 0)
             {
                 var allItems = await query
                     .OrderBy(x => x.Id)
-                    .Take(150)
                     .ToListAsync(cancellationToken);
 
                 response.CurrentPage = 1;

@@ -20,6 +20,11 @@ namespace PruebaTecnica.Infrastructure.Persistence.Seeds
                 new Product { Name = "Impresora HP LaserJet Pro", Description = "Impresora laser monocromatica", UnitPrice = 15750.00m },
                 new Product { Name = "Disco SSD 1TB Kingston", Description = "Unidad de estado solido SATA 2.5\" 1TB", UnitPrice = 5400.00m },
                 new Product { Name = "Webcam Logitech C920", Description = "Camara web Full HD 1080p", UnitPrice = 3900.00m },
+
+                // Productos de precio exacto usados por el caso verificable del PDF
+                // (RNC 98754321012): 200.00 x1 => ITBIS 36.00 y 1000.00 x1 => ITBIS 180.00.
+                new Product { Name = "Servicio de mensajeria local", Description = "Entrega de documentos dentro del Distrito Nacional", UnitPrice = 200.00m },
+                new Product { Name = "Servicio de consultoria (hora)", Description = "Hora de consultoria profesional", UnitPrice = 1000.00m },
             };
 
             foreach (var product in defaultProducts)

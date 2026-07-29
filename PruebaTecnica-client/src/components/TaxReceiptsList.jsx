@@ -1,82 +1,13 @@
-import { useEffect, useState, useCallback, } from "react";
-import { AlertCircle, FileText } from "lucide-react";
+import { FileText } from "lucide-react";
 import TaxReceiptCard from "./TaxReceiptCard";
-import EmptyState from "./EmptyState";
-import Pagination from "./Pagination";
 
-const TaxReceiptsList = ({rncIdentification}) => {
-  const [receipts, setReceipts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [page, setPage] = useState(1);
-  const pageSize = 10; // Constante fija
-  const [meta, setMeta] = useState({
-    currentPage: 1,
-    totalPages: 1,
-    totalItems: 0,
-    pageSize: 10,
-  });
-
-
-  const fetchReceipts = useCallback(async () => {
-
-    try {
-      setLoading(true);
-      setError("");
-
-      const params = new URLSearchParams();
-      params.append("page", page);
-      params.append("pageSize", pageSize);
-      params.append("rncIdentification", rncIdentification);
-
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/taxreceipts?${params.toString()}`,
-      );
-
-      if (response.status === 204) {
-        setReceipts([]);
-        setMeta({
-          currentPage: 1,
-          totalPages: 1,
-          totalItems: 0,
-          pageSize: 10,
-        });
-        return;
-      }
-
-      if (!response.ok) {
-        throw new Error(`Error ${response.status}: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      const items = Array.isArray(data.items) ? data.items : Array.isArray(data) ? data : [];
-
-      setReceipts(items);
-      setMeta({
-        currentPage: data.currentPage || page,
-        totalPages: data.totalPages || 1,
-        totalItems: data.totalItems || items.length,
-        pageSize: data.pageSize || 10,
-      });
-    } catch (err) {
-      console.error("Error cargando comprobantes:", err);
-      setError(err.message || "Error al cargar comprobantes fiscales");
-      setReceipts([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [page, pageSize, rncIdentification]);
-
-  useEffect(() => {
-
-    fetchReceipts();
-  }, [fetchReceipts]);
-
-  const handlePageChange = (newPage) => {
-    setPage(newPage);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
+// Componente presentacional: renderiza los comprobantes que recibe por props del
+// padre (TaxPayer.jsx). El padre ya trae el conjunto COMPLETO y no paginado desde
+// /taxpayers/{rnc}/taxreceipts y calcula el "Total ITBIS Acumulado" sobre ese mismo
+// arreglo, de modo que la lista y el total salen de una UNICA fuente y nunca divergen
+// (antes este componente re-consultaba /taxreceipts con pageSize=10 mientras el total
+// sumaba el set completo: con mas de 10 comprobantes mostraban datos distintos).
+const TaxReceiptsList = ({ receipts = [], loading = false }) => {
   if (loading) {
     return (
       <section className="rounded-2xl border border-slate-200 bg-white p-12 shadow-sm">
@@ -88,18 +19,9 @@ const TaxReceiptsList = ({rncIdentification}) => {
     );
   }
 
-  if (error) {
-    return (
-      <section className="rounded-xl border border-red-200 bg-red-50 p-4">
-        <div className="flex items-start gap-3">
-          <AlertCircle className="h-5 w-5 flex-shrink-0 text-red-600" />
-          <p className="text-sm text-red-700">{error}</p>
-        </div>
-      </section>
-    );
-  }
+  const items = Array.isArray(receipts) ? receipts : [];
 
-  if (!receipts || receipts.length === 0) {
+  if (items.length === 0) {
     return (
       <section className="rounded-2xl border border-slate-200 bg-white py-12 text-center shadow-sm sm:py-16">
         <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400">
@@ -121,23 +43,18 @@ const TaxReceiptsList = ({rncIdentification}) => {
           Comprobantes Fiscales
         </h2>
         <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">
-          {meta.totalItems} comprobantes
+          {items.length} comprobantes
         </span>
       </div>
 
       <div className="grid gap-4">
-        {receipts.map((receipt, index) => (
+        {items.map((receipt, index) => (
           <TaxReceiptCard
             key={`${receipt.rncIdentification}-${receipt.ncf}-${index}`}
             receipt={receipt}
           />
         ))}
       </div>
-
-      {/* Paginación */}
-      {meta.totalPages > 1 && (
-        <Pagination meta={meta} onPageChange={handlePageChange} />
-      )}
     </section>
   );
 };

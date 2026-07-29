@@ -1,30 +1,19 @@
+import { Search } from "lucide-react";
+
 const SearchBar = ({ searchTerm, onSearchChange, resultCount, totalCount }) => {
   return (
-    <section className="bg-gradient-to-br from-white via-blue-50/20 to-white rounded-2xl shadow-lg border border-blue-100 p-6 backdrop-blur-sm">
-      <div className="relative group">
+    <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="relative">
         <label htmlFor="search-input" className="sr-only">
           Buscar contribuyentes
         </label>
-        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-          <svg
-            className="h-6 w-6 text-blue-500 group-focus-within:text-blue-600 transition-colors"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+          <Search className="h-5 w-5 text-slate-400" aria-hidden="true" />
         </div>
         <input
           id="search-input"
           type="search"
-          className="block w-full pl-12 pr-4 py-4 border-2 text-gray-900 border-blue-200 rounded-xl leading-5 bg-white placeholder-gray-400 focus:outline-none focus:placeholder-gray-500 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md font-medium"
+          className="w-full rounded-lg border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500"
           placeholder="Buscar por nombre o RNC..."
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
@@ -34,11 +23,12 @@ const SearchBar = ({ searchTerm, onSearchChange, resultCount, totalCount }) => {
       {searchTerm && (
         <div
           id="search-results"
-          className="mt-3 text-sm font-medium text-blue-700 bg-blue-50 px-4 py-2 rounded-lg inline-block"
+          className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20"
           role="status"
           aria-live="polite"
         >
-          🔍 Mostrando <span className="font-bold">{resultCount}</span> de <span className="font-bold">{totalCount}</span> contribuyentes
+          Mostrando <span className="font-semibold">{resultCount}</span> de{" "}
+          <span className="font-semibold">{totalCount}</span> contribuyentes
         </div>
       )}
     </section>

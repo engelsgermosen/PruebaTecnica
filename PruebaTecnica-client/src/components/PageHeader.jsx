@@ -1,35 +1,27 @@
+import { RefreshCw, LayoutDashboard } from "lucide-react";
+
 const PageHeader = ({ title, description, onRefresh }) => {
   return (
-    <header className="bg-gradient-to-br from-white via-blue-50/30 to-white rounded-2xl shadow-xl border border-blue-100 p-8 backdrop-blur-sm">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="space-y-2">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-900 to-indigo-700 bg-clip-text text-transparent">{title}</h1>
-          <p className="text-gray-600 text-lg">{description}</p>
+    <header className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-4">
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+            <LayoutDashboard className="h-5 w-5" />
+          </span>
+          <div className="space-y-1">
+            <h1 className="text-2xl font-semibold text-slate-900 sm:text-3xl">{title}</h1>
+            <p className="text-sm text-slate-500">{description}</p>
+          </div>
         </div>
         {onRefresh && (
-          <div>
-            <button
-              onClick={onRefresh}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95"
-              aria-label="Actualizar lista de contribuyentes"
-            >
-              <svg
-                className="w-5 h-5 transition-transform group-hover:rotate-180 duration-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                />
-              </svg>
-              Actualizar
-            </button>
-          </div>
+          <button
+            onClick={onRefresh}
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/40 active:scale-[.98] disabled:pointer-events-none disabled:opacity-50"
+            aria-label="Actualizar lista de contribuyentes"
+          >
+            <RefreshCw className="h-4 w-4" aria-hidden="true" />
+            Actualizar
+          </button>
         )}
       </div>
     </header>

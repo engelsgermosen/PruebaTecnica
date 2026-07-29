@@ -4,9 +4,17 @@ import { AuthContext } from "../../contexts/AuthContext";
 import TaxPayerCard from "../../components/TaxPayerCard";
 import TaxPayerModal from "../../components/TaxPayerModal";
 import DeleteTaxPayerModal from "../../components/DeleteTaxPayerModal";
-import { isAuthenticated } from "../../middlewares/Auth";
 import { toast } from "sonner";
 import useApi from "@/lib/axiosClient";
+import {
+  Users,
+  Plus,
+  Search,
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
+  FileText,
+} from "lucide-react";
 
 const TaxPayer = () => {
   const navigate = useNavigate();
@@ -190,49 +198,31 @@ const TaxPayer = () => {
     navigate(`/taxpayer/${taxPayer.rncIdentification}`);
   };
 
-  if (!isAuthenticated) {
-    navigate("/login");
-  }
-
   return (
-    <div className="min-h-screen flex-1 bg-gray-50">
+    <div className="min-h-screen flex-1 bg-slate-50">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Header */}
-        <header className="mb-8 bg-linear-to-br from-white via-blue-50/30 to-white rounded-2xl shadow-xl border border-blue-100 p-8">
+        <header className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="md:flex md:items-center md:justify-between gap-4">
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 bg-linear-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
-                  <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </div>
-                <h1 className="text-4xl font-bold bg-linear-to-r from-blue-900 to-indigo-700 bg-clip-text text-transparent">
+              <div className="flex items-center gap-3">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                  <Users className="h-5 w-5" />
+                </span>
+                <h1 className="text-2xl font-semibold text-slate-900">
                   Gestión de Contribuyentes
                 </h1>
               </div>
-              <p className="text-gray-600 text-lg ml-14">
+              <p className="mt-2 text-sm text-slate-500 md:ml-[3.25rem]">
                 Administra la información de todos los contribuyentes registrados
               </p>
             </div>
             <div className="mt-4 md:mt-0">
               <button
                 onClick={openCreateModal}
-                className="inline-flex items-center gap-2 px-6 py-3 border border-transparent rounded-xl shadow-lg text-sm font-semibold text-white bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 transform hover:scale-105 active:scale-95"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 active:scale-[.98] disabled:pointer-events-none disabled:opacity-50"
               >
-                <svg
-                  className="mr-2 h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
+                <Plus className="h-4 w-4" />
                 Nuevo Contribuyente
               </button>
             </div>
@@ -240,40 +230,28 @@ const TaxPayer = () => {
         </header>
 
         {/* Filtros y búsqueda */}
-        <section className="mb-6 bg-linear-to-br from-white via-blue-50/20 to-white rounded-2xl shadow-lg border border-blue-100 p-6">
+        <section className="mb-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Búsqueda */}
             <div>
               <label
                 htmlFor="search"
-                className="block text-sm font-semibold text-gray-900 mb-2"
+                className="block text-sm font-medium text-slate-700"
               >
-                🔍 Buscar contribuyente
+                Buscar contribuyente
               </label>
-              <div className="relative group">
+              <div className="relative mt-1.5">
+                <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                  <Search className="h-4 w-4" />
+                </span>
                 <input
                   type="text"
                   id="search"
                   placeholder="Buscar por nombre o RNC..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="block w-full text-gray-900 pl-12 pr-4 py-3 border-2 border-blue-200 rounded-xl leading-5 bg-white placeholder-gray-400 focus:outline-none focus:placeholder-gray-500 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md font-medium"
+                  className="w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
                 />
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <svg
-                    className="h-6 w-6 text-blue-500 group-focus-within:text-blue-600 transition-colors"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
-                </div>
               </div>
             </div>
 
@@ -281,70 +259,64 @@ const TaxPayer = () => {
             <div>
               <label
                 htmlFor="statusFilter"
-                className="block text-sm font-semibold text-gray-900 mb-2"
+                className="block text-sm font-medium text-slate-700"
               >
-                📦 Filtrar por estado
+                Filtrar por estado
               </label>
               <select
                 id="statusFilter"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="block w-full px-4 py-3 border-2 text-gray-900 border-blue-200 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 hover:shadow-md font-medium bg-white"
+                className="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
               >
-                <option value="todos">📊 Todos los estados</option>
-                <option value="true">✅ Activo</option>
-                <option value="false">❌ Inactivo</option>
+                <option value="todos">Todos los estados</option>
+                <option value="true">Activo</option>
+                <option value="false">Inactivo</option>
               </select>
             </div>
           </div>
 
           {/* Estadísticas */}
           <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-linear-to-br from-blue-500 to-indigo-600 rounded-xl p-5 shadow-lg transform hover:scale-105 transition-all duration-200">
-              <div className="flex items-center justify-between">
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-3xl font-bold text-white">
-                    {filteredTaxPayers.length}
-                  </div>
-                  <div className="text-sm text-blue-100 font-medium mt-1">
+                  <p className="text-sm font-medium text-slate-500">
                     Total encontrados
-                  </div>
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold text-blue-600">
+                    {filteredTaxPayers.length}
+                  </p>
                 </div>
-                <div className="p-3 bg-white/20 rounded-lg">
-                  <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </div>
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                  <Users className="h-5 w-5" />
+                </span>
               </div>
             </div>
-            <div className="bg-linear-to-br from-green-500 to-emerald-600 rounded-xl p-5 shadow-lg transform hover:scale-105 transition-all duration-200">
-              <div className="flex items-center justify-between">
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-3xl font-bold text-white">
+                  <p className="text-sm font-medium text-slate-500">Activos</p>
+                  <p className="mt-1 text-2xl font-semibold text-emerald-600">
                     {filteredTaxPayers.filter((tp) => tp.status === true).length}
-                  </div>
-                  <div className="text-sm text-green-100 font-medium mt-1">✅ Activos</div>
+                  </p>
                 </div>
-                <div className="p-3 bg-white/20 rounded-lg">
-                  <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                  <CheckCircle2 className="h-5 w-5" />
+                </span>
               </div>
             </div>
-            <div className="bg-linear-to-br from-red-500 to-rose-600 rounded-xl p-5 shadow-lg transform hover:scale-105 transition-all duration-200">
-              <div className="flex items-center justify-between">
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-3xl font-bold text-white">
+                  <p className="text-sm font-medium text-slate-500">Inactivos</p>
+                  <p className="mt-1 text-2xl font-semibold text-red-600">
                     {filteredTaxPayers.filter((tp) => tp.status === false).length}
-                  </div>
-                  <div className="text-sm text-red-100 font-medium mt-1">❌ Inactivos</div>
+                  </p>
                 </div>
-                <div className="p-3 bg-white/20 rounded-lg">
-                  <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-red-50 text-red-600">
+                  <XCircle className="h-5 w-5" />
+                </span>
               </div>
             </div>
           </div>
@@ -352,77 +324,35 @@ const TaxPayer = () => {
 
         {/* Mensajes de error */}
         {error && (
-          <div className="mb-6 bg-linear-to-r from-red-50 to-rose-50 border-2 border-red-200 rounded-xl p-5 shadow-lg animate-slideInDown">
+          <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4">
             <div className="flex items-start gap-3">
-              <div className="shrink-0 p-2 bg-red-100 rounded-lg">
-                <svg
-                  className="h-6 w-6 text-red-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
-                  />
-                </svg>
-              </div>
+              <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-600" />
               <div className="flex-1">
-                <h3 className="text-sm font-bold text-red-900 mb-1">⚠️ Error</h3>
-                <div className="text-sm text-red-700 font-medium">{error}</div>
+                <h3 className="text-sm font-semibold text-red-800">Error</h3>
+                <div className="mt-0.5 text-sm text-red-700">{error}</div>
               </div>
             </div>
           </div>
         )}
 
         {/* Lista de contribuyentes */}
-        <section className="shadow rounded-lg">
+        <section className="rounded-2xl border border-slate-200 bg-white shadow-sm">
           {loading ? (
-            <div className="p-6 text-center">
-              <div className="inline-flex items-center">
-                <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
+            <div className="flex flex-col items-center justify-center py-12 sm:py-16">
+              <div className="h-10 w-10 animate-spin rounded-full border-[3px] border-slate-200 border-t-blue-600" />
+              <p className="mt-3 text-sm font-medium text-slate-500">
                 Cargando contribuyentes...
-              </div>
+              </p>
             </div>
           ) : filteredTaxPayers.length === 0 ? (
-            <div className="p-6 text-center">
-              <svg
-                className="mx-auto h-12 w-12 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-              <h3 className="mt-2 text-sm font-medium text-gray-900">
+            <div className="flex flex-col items-center justify-center py-12 text-center sm:py-16">
+              <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                <FileText className="h-7 w-7" />
+              </span>
+              <h3 className="mt-4 text-base font-semibold text-slate-900">
                 No hay contribuyentes
               </h3>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-slate-500">
                 {searchTerm || statusFilter !== "todos"
                   ? "No se encontraron contribuyentes con los filtros aplicados."
                   : "Comienza creando un nuevo contribuyente."}
@@ -431,28 +361,16 @@ const TaxPayer = () => {
                 <div className="mt-6">
                   <button
                     onClick={openCreateModal}
-                    className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 active:scale-[.98]"
                   >
-                    <svg
-                      className="mr-2 h-4 w-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 4v16m8-8H4"
-                      />
-                    </svg>
+                    <Plus className="h-4 w-4" />
                     Nuevo Contribuyente
                   </button>
                 </div>
               )}
             </div>
           ) : (
-            <div className="divide-y divide-gray-200">
+            <div className="divide-y divide-slate-200">
               {filteredTaxPayers.map((taxPayer) => (
                 <TaxPayerCard
                   key={taxPayer.rncIdentification}

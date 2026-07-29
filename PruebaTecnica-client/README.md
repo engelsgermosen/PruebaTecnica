@@ -22,8 +22,8 @@ Sistema de gestión de contribuyentes y comprobantes fiscales para la Dirección
 
 1. **Clonar el repositorio:**
 ```bash
-git clone https://github.com/engelsgermosen/pasantia-client.git
-cd pasantia-client
+git clone https://github.com/engelsgermosen/PruebaTecnica-client.git
+cd PruebaTecnica-client
 ```
 
 2. **Instalar dependencias:**

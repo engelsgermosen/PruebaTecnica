@@ -1,4 +1,5 @@
 import { createPortal } from "react-dom";
+import { AlertTriangle, Loader2, X } from "lucide-react";
 
 const DeleteTaxPayerModal = ({
   isOpen,
@@ -17,62 +18,63 @@ const DeleteTaxPayerModal = ({
 
   return createPortal(
     <div
-      className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-9999 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm"
       onClick={handleBackdropClick}
     >
-      <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full">
+      <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white shadow-lg">
         {/* Header */}
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center">
-            <div className="mx-auto shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
-              <svg
-                className="h-6 w-6 text-red-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
-                />
-              </svg>
-            </div>
-            <div className="ml-4">
-              <h3 className="text-lg font-medium text-gray-900">
+        <div className="flex items-center justify-between gap-3 border-b border-slate-200 p-5">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600">
+              <AlertTriangle className="h-5 w-5" />
+            </span>
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900">
                 Eliminar Contribuyente
               </h3>
-              <p className="text-sm text-gray-500">
+              <p className="mt-0.5 text-sm text-slate-500">
                 Esta acción no se puede deshacer
               </p>
             </div>
           </div>
-        </div>
-
-        {/* Body */}
-        <div className="p-6">
-          <p className="text-sm text-gray-700">
-            ¿Estás seguro de que quieres eliminar el contribuyente{" "}
-            <strong className="font-medium">{taxPayer.name}</strong> con RNC{" "}
-            <strong className="font-medium">
-              {taxPayer.rncIdentification}
-            </strong>
-            ?
-          </p>
-          <p className="text-sm text-red-600 mt-2">
-            Esta acción eliminará permanentemente todos los datos asociados a
-            este contribuyente.
-          </p>
-        </div>
-
-        {/* Footer */}
-        <div className="px-6 py-4 bg-gray-50 rounded-b-lg flex justify-end space-x-3">
           <button
             type="button"
             onClick={onClose}
             disabled={loading}
-            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150 ease-in-out"
+            className="rounded-lg p-2 text-slate-600 transition-colors hover:bg-slate-100 disabled:pointer-events-none disabled:opacity-50"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="p-5">
+          <p className="text-sm text-slate-700">
+            ¿Estás seguro de que quieres eliminar el contribuyente{" "}
+            <strong className="font-semibold text-slate-900">
+              {taxPayer.name}
+            </strong>{" "}
+            con RNC{" "}
+            <strong className="font-semibold text-slate-900">
+              {taxPayer.rncIdentification}
+            </strong>
+            ?
+          </p>
+          <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4">
+            <p className="text-sm text-red-700">
+              Esta acción eliminará permanentemente todos los datos asociados a
+              este contribuyente.
+            </p>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex justify-end gap-3 border-t border-slate-200 p-5">
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={loading}
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/40 disabled:pointer-events-none disabled:opacity-50"
           >
             Cancelar
           </button>
@@ -80,29 +82,11 @@ const DeleteTaxPayerModal = ({
             type="button"
             onClick={() => onConfirm(taxPayer.rncIdentification)}
             disabled={loading}
-            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150 ease-in-out"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/40 disabled:pointer-events-none disabled:opacity-50"
           >
             {loading ? (
               <>
-                <svg
-                  className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
+                <Loader2 className="h-4 w-4 animate-spin" />
                 Eliminando...
               </>
             ) : (

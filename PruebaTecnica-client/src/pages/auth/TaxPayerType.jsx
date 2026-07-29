@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { Plus } from "lucide-react";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import EmptyState from "../../components/EmptyState";
 import ErrorAlert from "../../components/ErrorAlert";
@@ -6,8 +7,6 @@ import TaxPayerTypeCard from "../../components/TaxPayerTypeCard";
 import TaxPayerTypeModal from "../../components/TaxPayerTypeModal";
 import DeleteConfirmationModal from "../../components/DeleteConfirmationModal";
 import { AuthContext } from "../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { isAuthenticated } from "../../middlewares/Auth";
 import PageHeader from "../../components/PageHeader";
 import { toast } from "sonner";
 import { useApi } from "../../lib/axiosClient";
@@ -18,7 +17,6 @@ const TaxPayerType = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const { token } = useContext(AuthContext);
-  const navigate = useNavigate();
 
   // Estados para modales
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -129,7 +127,7 @@ const TaxPayerType = () => {
       );
 
       if (response.status !== 204 && response.status !== 200) {
-        
+
         setError(
           response?.data?.detail || "Error al eliminar el tipo de contribuyente"
         );
@@ -178,18 +176,12 @@ const TaxPayerType = () => {
     }
   }, [token]);
 
-  useEffect(() => {
-    if (!isAuthenticated()) {
-      navigate("/");
-    }
-  }, [navigate]);
-
   const handleCreateClick = () => {
     setShowCreateModal(true);
   };
 
   return (
-    <div className="min-h-screen flex-1 bg-gray-50 py-8">
+    <div className="min-h-screen flex-1 bg-slate-50 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <PageHeader
@@ -202,7 +194,7 @@ const TaxPayerType = () => {
         <div className="mb-6" />
 
         {/* Contenido principal */}
-        <section className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <section className="bg-white rounded-2xl shadow-sm border border-slate-200">
           {error && <ErrorAlert message={error} />}
 
           {loading ? (
@@ -211,32 +203,20 @@ const TaxPayerType = () => {
             <EmptyState />
           ) : (
             <div className="p-6">
-              <header className="mb-4 flex items-center justify-between">
+              <header className="mb-4 flex items-center justify-between gap-3 border-b border-slate-200 pb-4">
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-900">
+                  <h2 className="text-lg font-semibold text-slate-900">
                     Lista de Tipos de Contribuyente
                   </h2>
-                  <p className="text-sm text-gray-600">
+                  <p className="mt-1 text-sm text-slate-500">
                     Total: {taxPayerTypes.length} tipos de contribuyente
                   </p>
                 </div>
                 <button
                   onClick={handleCreateClick}
-                  className="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition duration-200 ease-in-out transform hover:scale-105"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 active:scale-[.98] disabled:pointer-events-none disabled:opacity-50"
                 >
-                  <svg
-                    className="w-4 h-4 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
+                  <Plus className="h-4 w-4" />
                   Crear Nuevo Tipo
                 </button>
               </header>
@@ -260,17 +240,17 @@ const TaxPayerType = () => {
 
         {/* Footer con estadísticas */}
         {!loading && taxPayerTypes.length > 0 && (
-          <footer className="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <footer className="mt-6 bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
             <div className="flex items-center justify-between">
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-slate-600">
                 Total de tipos:{" "}
-                <span className="font-medium text-gray-900">
+                <span className="font-medium text-slate-900">
                   {taxPayerTypes.length}
                 </span>
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-slate-600">
                 Última actualización:{" "}
-                <time className="font-medium text-gray-900">
+                <time className="font-medium text-slate-900">
                   {new Date().toLocaleDateString()}
                 </time>
               </div>

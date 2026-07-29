@@ -13,6 +13,7 @@ import {
   SelectContent,
   SelectItem,
 } from "./ui/select";
+import { AlertCircle, UserPlus, Loader2 } from "lucide-react";
 
 const TaxReceiptForm = ({ onSubmit, onCancel, loading = false }) => {
   const navigate = useNavigate();
@@ -224,26 +225,10 @@ const TaxReceiptForm = ({ onSubmit, onCancel, loading = false }) => {
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Error general */}
       {errors.general && (
-        <div className="bg-red-50 border border-red-200 rounded-md p-4">
-          <div className="flex">
-            <div className="shrink-0">
-              <svg
-                className="h-5 w-5 text-red-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
-                />
-              </svg>
-            </div>
-            <div className="ml-3">
-              <p className="text-sm text-red-700">{errors.general}</p>
-            </div>
+        <div className="rounded-xl border border-red-200 bg-red-50 p-4">
+          <div className="flex items-start gap-3">
+            <AlertCircle className="h-5 w-5 shrink-0 text-red-600" />
+            <p className="text-sm text-red-700">{errors.general}</p>
           </div>
         </div>
       )}
@@ -253,7 +238,10 @@ const TaxReceiptForm = ({ onSubmit, onCancel, loading = false }) => {
         <Label htmlFor="rncIdentification">
           Cédula o RNC
           {searchingTaxPayer && (
-            <span className="ml-2 text-xs text-primary">Buscando...</span>
+            <span className="ml-2 inline-flex items-center gap-1 text-xs text-blue-600">
+              <Loader2 className="h-3 w-3 animate-spin" />
+              Buscando...
+            </span>
           )}
         </Label>
         <div className="relative">
@@ -278,34 +266,21 @@ const TaxReceiptForm = ({ onSubmit, onCancel, loading = false }) => {
            formData.rncIdentification.trim().length <= 11 &&
            !taxPayerExists && (
             <div className="absolute top-1/2 -translate-y-1/2 right-2">
-              <Button
+              <button
                 type="button"
-                size="sm"
-                variant="outline"
-                className="h-7 px-2 text-xs bg-green-50 hover:bg-green-100 border-green-300 text-green-700"
                 onClick={handleCreateTaxPayerFromRnc}
                 title="Crear contribuyente con este RNC"
+                className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-50 hover:text-blue-700"
               >
-                <svg
-                  className="h-3 w-3 mr-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                Crear
-              </Button>
+                <UserPlus className="h-3.5 w-3.5" />
+                Crear contribuyente
+              </button>
             </div>
           )}
         </div>
         {errors.rncIdentification && (
-          <p className="text-sm text-red-600" role="alert">
+          <p className="mt-1.5 flex items-center gap-1.5 text-sm text-red-600" role="alert">
+            <AlertCircle className="h-4 w-4 shrink-0" />
             {errors.rncIdentification}
           </p>
         )}
@@ -344,7 +319,8 @@ const TaxReceiptForm = ({ onSubmit, onCancel, loading = false }) => {
           </SelectContent>
         </Select>
         {errors.type && (
-          <p className="text-sm text-red-600" role="alert">
+          <p className="mt-1.5 flex items-center gap-1.5 text-sm text-red-600" role="alert">
+            <AlertCircle className="h-4 w-4 shrink-0" />
             {errors.type}
           </p>
         )}
@@ -363,20 +339,21 @@ const TaxReceiptForm = ({ onSubmit, onCancel, loading = false }) => {
           onChange={handleChange}
           placeholder="Ingrese el monto de la factura"
           aria-invalid={Boolean(errors.amount)}
-          className={errors.amount ? "border-red-400 ring-red-300 bg-red-50" : ""}
+          className={errors.amount ? "border-red-400 focus:border-red-500 focus:ring-red-500/30" : ""}
         />
         {errors.amount && (
-          <p className="text-sm text-red-600" role="alert">
+          <p className="mt-1.5 flex items-center gap-1.5 text-sm text-red-600" role="alert">
+            <AlertCircle className="h-4 w-4 shrink-0" />
             {errors.amount}
           </p>
         )}
       </div>
 
       {/* Cálculos */}
-      <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-2">
         <div className="flex justify-between text-sm">
-          <span className="text-gray-600">Subtotal:</span>
-          <span className="font-medium">
+          <span className="text-slate-600">Subtotal:</span>
+          <span className="font-medium text-slate-900">
             {new Intl.NumberFormat("es-DO", {
               style: "currency",
               currency: "DOP"
@@ -384,16 +361,16 @@ const TaxReceiptForm = ({ onSubmit, onCancel, loading = false }) => {
           </span>
         </div>
         <div className="flex justify-between text-sm">
-          <span className="text-gray-600">ITBIS (18%):</span>
-          <span className="font-medium">{new Intl.NumberFormat("es-DO", {
+          <span className="text-slate-600">ITBIS (18%):</span>
+          <span className="font-medium text-amber-700">{new Intl.NumberFormat("es-DO", {
             style: "currency",
             currency: "DOP"
           }).format(parseFloat(itbis18))}</span>
         </div>
-        <div className="border-t border-gray-200 pt-2">
+        <div className="border-t border-slate-200 pt-2">
           <div className="flex justify-between text-base font-semibold">
-            <span>Total:</span>
-            <span>{new Intl.NumberFormat("es-DO", {
+            <span className="text-slate-900">Total:</span>
+            <span className="text-blue-600">{new Intl.NumberFormat("es-DO", {
               style: "currency",
               currency: "DOP"
             }).format(parseFloat(total))}</span>
@@ -421,28 +398,10 @@ const TaxReceiptForm = ({ onSubmit, onCancel, loading = false }) => {
           }
         >
           {loading ? (
-            <div className="flex items-center">
-              <svg
-                className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                />
-              </svg>
+            <span className="flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
               Creando...
-            </div>
+            </span>
           ) : (
             "Crear Comprobante"
           )}

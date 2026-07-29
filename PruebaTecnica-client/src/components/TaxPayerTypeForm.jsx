@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { AlertCircle, Loader2 } from "lucide-react";
 
 const TaxPayerTypeForm = ({
   taxPayerType,
@@ -55,13 +56,14 @@ const TaxPayerTypeForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       <div>
         <label
           htmlFor="name"
-          className="block text-sm font-medium text-gray-700 mb-2"
+          className="block text-sm font-medium text-slate-700 mb-2"
         >
-          Nombre del Tipo de Contribuyente
+          Nombre del Tipo de Contribuyente{" "}
+          <span className="text-red-500">*</span>
         </label>
         <input
           type="text"
@@ -69,56 +71,44 @@ const TaxPayerTypeForm = ({
           name="name"
           value={formData.name}
           onChange={handleChange}
-          className={`block w-full text-slate-700 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-            errors.name ? "border-red-300 bg-red-50" : "border-gray-300"
+          className={`w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition-colors focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 ${
+            errors.name
+              ? "border-red-400 focus:border-red-500 focus:ring-red-500/30"
+              : "border-slate-300 focus:border-blue-500 focus:ring-blue-500/30"
           }`}
           placeholder="Ingrese el nombre del tipo de contribuyente"
           disabled={loading}
         />
         {errors.name && (
-          <p className="mt-1 text-sm text-red-600" role="alert">
+          <p
+            className="mt-1.5 flex items-center gap-1.5 text-sm text-red-600"
+            role="alert"
+          >
+            <AlertCircle className="h-4 w-4" />
             {errors.name}
           </p>
         )}
       </div>
 
-      <div className="flex justify-end space-x-3 pt-4">
+      <div className="flex justify-end gap-3 pt-4">
         <button
           type="button"
           onClick={onCancel}
           disabled={loading}
-          className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 hover:border-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/40 disabled:pointer-events-none disabled:opacity-50"
         >
           Cancelar
         </button>
         <button
           type="submit"
           disabled={loading || !formData.name.trim()}
-          className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 active:scale-[.98] disabled:pointer-events-none disabled:opacity-50"
         >
           {loading ? (
-            <div className="flex items-center">
-              <svg
-                className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
               {isEditing ? "Actualizando..." : "Creando..."}
-            </div>
+            </>
           ) : isEditing ? (
             "Actualizar"
           ) : (

@@ -13,11 +13,11 @@ export default function Pagination({ meta, onPageChange }) {
   }
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-br from-white via-blue-50/20 to-white rounded-2xl shadow-lg border border-blue-100 p-6 mt-6">
-      <div className="text-sm font-medium text-gray-700">
-        Mostrando <span className="font-bold text-blue-700">{startItem}</span> a{" "}
-        <span className="font-bold text-blue-700">{endItem}</span> de{" "}
-        <span className="font-bold text-blue-700">{totalItems}</span> resultados
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white shadow-sm p-6 mt-6">
+      <div className="text-sm font-medium text-slate-600">
+        Mostrando <span className="font-semibold text-slate-900">{startItem}</span> a{" "}
+        <span className="font-semibold text-slate-900">{endItem}</span> de{" "}
+        <span className="font-semibold text-slate-900">{totalItems}</span> resultados
       </div>
 
       <div className="flex items-center gap-2 flex-wrap justify-center">
@@ -26,7 +26,7 @@ export default function Pagination({ meta, onPageChange }) {
           size="sm"
           disabled={currentPage === 1}
           onClick={() => onPageChange(1)}
-          className="border-blue-200 hover:bg-blue-50 hover:border-blue-300 disabled:opacity-50 font-semibold"
+          className="rounded-lg border-slate-200 text-slate-700 font-semibold hover:bg-slate-50 hover:border-slate-300 disabled:opacity-50"
         >
           Primera
         </Button>
@@ -36,15 +36,15 @@ export default function Pagination({ meta, onPageChange }) {
           size="sm"
           disabled={currentPage === 1}
           onClick={() => onPageChange(currentPage - 1)}
-          className="border-blue-200 hover:bg-blue-50 hover:border-blue-300 disabled:opacity-50 font-semibold"
+          className="rounded-lg border-slate-200 text-slate-700 font-semibold hover:bg-slate-50 hover:border-slate-300 disabled:opacity-50"
         >
           <ChevronLeft className="h-4 w-4" />
           Anterior
         </Button>
 
-        <span className="text-sm font-semibold text-gray-900 px-4 py-2 bg-blue-100 rounded-lg">
-          Página <span className="text-blue-700">{currentPage}</span> de{" "}
-          <span className="text-blue-700">{totalPages}</span>
+        <span className="text-sm font-semibold text-slate-700 px-4 py-2 bg-blue-50 rounded-lg">
+          Página <span className="text-blue-600">{currentPage}</span> de{" "}
+          <span className="text-blue-600">{totalPages}</span>
         </span>
 
         <Button
@@ -52,7 +52,7 @@ export default function Pagination({ meta, onPageChange }) {
           size="sm"
           disabled={currentPage === totalPages}
           onClick={() => onPageChange(currentPage + 1)}
-          className="border-blue-200 hover:bg-blue-50 hover:border-blue-300 disabled:opacity-50 font-semibold"
+          className="rounded-lg border-slate-200 text-slate-700 font-semibold hover:bg-slate-50 hover:border-slate-300 disabled:opacity-50"
         >
           Siguiente
           <ChevronRight className="h-4 w-4" />
@@ -63,7 +63,7 @@ export default function Pagination({ meta, onPageChange }) {
           size="sm"
           disabled={currentPage === totalPages}
           onClick={() => onPageChange(totalPages)}
-          className="border-blue-200 hover:bg-blue-50 hover:border-blue-300 disabled:opacity-50 font-semibold"
+          className="rounded-lg border-slate-200 text-slate-700 font-semibold hover:bg-slate-50 hover:border-slate-300 disabled:opacity-50"
         >
           Última
         </Button>

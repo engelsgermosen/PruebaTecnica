@@ -46,7 +46,8 @@ Migrations/
 # ============================================
 # Environment / Configuration
 # ============================================
-.env
+# Deje .env para que solo sea correr el comando build del compose
+#.env
 .env.*
 appsettings.Development.json
 appsettings.Local.json

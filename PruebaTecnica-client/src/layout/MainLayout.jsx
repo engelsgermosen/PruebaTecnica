@@ -5,10 +5,10 @@ import { Toaster } from "sonner";
 
 const MainLayout = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-linear-to-br from-gray-50 via-blue-50/30 to-gray-100">
+    <div className="flex min-h-screen flex-col bg-slate-50">
       <Header />
       <Toaster richColors position="top-right" />
-      <main className="flex flex-1 container mx-auto px-4 py-8">
+      <main className="container mx-auto flex w-full flex-1 px-4 py-8 sm:px-6 lg:px-8">
         <Outlet />
       </main>
       <Footer />

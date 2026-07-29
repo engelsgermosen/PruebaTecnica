@@ -1,7 +1,7 @@
 const Input = ({ name, label, type, placeholder, value, onChange }) => {
   return (
-    <div className="space-y-2">
-      <label className="block text-sm font-semibold text-gray-900">
+    <div className="space-y-1.5">
+      <label className="block text-sm font-medium text-slate-700">
         {label}
         <span className="text-red-500 ml-1">*</span>
       </label>
@@ -11,7 +11,7 @@ const Input = ({ name, label, type, placeholder, value, onChange }) => {
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="block w-full px-4 py-3 border-2 border-gray-200 rounded-xl shadow-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 hover:border-blue-300 transition-all duration-200 font-medium"
+        className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500"
       />
     </div>
   );

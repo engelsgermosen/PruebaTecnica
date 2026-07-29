@@ -1,5 +1,13 @@
 import { useState, useEffect, } from "react";
+import { AlertCircle, Info } from "lucide-react";
 import useApi from "@/lib/axiosClient";
+
+const inputBase =
+  "w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition-colors focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500";
+const inputNormal =
+  "border-slate-300 focus:border-blue-500 focus:ring-blue-500/30";
+const inputError =
+  "border-red-400 focus:border-red-500 focus:ring-red-500/30";
 
 const TaxPayerForm = ({
   taxPayer,
@@ -123,10 +131,10 @@ const TaxPayerForm = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <label
           htmlFor="rncIdentification"
-          className="block text-sm font-semibold text-gray-900"
+          className="block text-sm font-medium text-slate-700"
         >
           RNC/Identificación
           <span className="text-red-500 ml-1">*</span>
@@ -142,35 +150,29 @@ const TaxPayerForm = ({
           minLength={9}
           maxLength={11}
           aria-invalid={Boolean(errors.rncIdentification)}
-          className={`block w-full text-gray-900 px-4 py-3 border-2 rounded-xl shadow-sm focus:outline-none focus:ring-4 transition-all duration-200 ${
-            errors.rncIdentification
-              ? "border-red-400 focus:ring-red-500/20 focus:border-red-500 bg-red-50"
-              : "border-gray-200 focus:ring-blue-500/20 focus:border-blue-500"
-          } ${isEditing ? "bg-gray-100 cursor-not-allowed opacity-60" : "hover:border-blue-300"}`}
+          className={`${inputBase} ${
+            errors.rncIdentification ? inputError : inputNormal
+          }`}
           placeholder="Ingrese el RNC o Cédula (9-11 dígitos)"
         />
         {errors.rncIdentification && (
-          <p className="flex items-center gap-2 text-sm text-red-600 font-medium" role="alert">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-            </svg>
+          <p className="mt-1.5 flex items-center gap-1.5 text-sm text-red-600" role="alert">
+            <AlertCircle className="h-4 w-4" />
             {errors.rncIdentification}
           </p>
         )}
         {isEditing && (
-          <p className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-lg">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-            </svg>
+          <p className="mt-1.5 flex items-center gap-1.5 text-sm text-slate-500">
+            <Info className="h-4 w-4" />
             El RNC o Cedula no puede ser modificado
           </p>
         )}
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <label
           htmlFor="name"
-          className="block text-sm font-semibold text-gray-900"
+          className="block text-sm font-medium text-slate-700"
         >
           Nombre del Contribuyente
           <span className="text-red-500 ml-1">*</span>
@@ -181,26 +183,22 @@ const TaxPayerForm = ({
           name="name"
           value={formData.name}
           onChange={handleChange}
-          className={`block w-full px-4 py-3 text-gray-900 border-2 rounded-xl shadow-sm focus:outline-none focus:ring-4 transition-all duration-200 ${
-            errors.name ? "border-red-400 focus:ring-red-500/20 focus:border-red-500 bg-red-50" : "border-gray-200 focus:ring-blue-500/20 focus:border-blue-500 hover:border-blue-300"
-          }`}
+          className={`${inputBase} ${errors.name ? inputError : inputNormal}`}
           placeholder="Ingrese el nombre del contribuyente"
           disabled={loading}
         />
         {errors.name && (
-          <p className="flex items-center gap-2 text-sm text-red-600 font-medium" role="alert">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-            </svg>
+          <p className="mt-1.5 flex items-center gap-1.5 text-sm text-red-600" role="alert">
+            <AlertCircle className="h-4 w-4" />
             {errors.name}
           </p>
         )}
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <label
           htmlFor="status"
-          className="block text-sm font-semibold text-gray-900"
+          className="block text-sm font-medium text-slate-700"
         >
           Estado
           <span className="text-red-500 ml-1">*</span>
@@ -210,29 +208,25 @@ const TaxPayerForm = ({
           name="status"
           value={formData.status}
           onChange={handleChange}
-          className={`block w-full px-4 py-3 text-gray-900 border-2 rounded-xl shadow-sm focus:outline-none focus:ring-4 transition-all duration-200 ${
-            errors.status ? "border-red-400 focus:ring-red-500/20 focus:border-red-500 bg-red-50" : "border-gray-200 focus:ring-blue-500/20 focus:border-blue-500 hover:border-blue-300"
-          }`}
+          className={`${inputBase} ${errors.status ? inputError : inputNormal}`}
           disabled={loading}
         >
           <option value="">Seleccione un estado</option>
-          <option value="true">✅ Activo</option>
-          <option value="false">❌ Inactivo</option>
+          <option value="true">Activo</option>
+          <option value="false">Inactivo</option>
         </select>
         {errors.status && (
-          <p className="flex items-center gap-2 text-sm text-red-600 font-medium" role="alert">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-            </svg>
+          <p className="mt-1.5 flex items-center gap-1.5 text-sm text-red-600" role="alert">
+            <AlertCircle className="h-4 w-4" />
             {errors.status}
           </p>
         )}
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <label
           htmlFor="type"
-          className="block text-sm font-semibold text-gray-900"
+          className="block text-sm font-medium text-slate-700"
         >
           Tipo de Contribuyente
           <span className="text-red-500 ml-1">*</span>
@@ -242,10 +236,8 @@ const TaxPayerForm = ({
           name="taxPayerTypeId"
           value={formData.taxPayerTypeId}
           onChange={handleChange}
-          className={`block w-full px-4 text-gray-900 py-3 border-2 rounded-xl shadow-sm focus:outline-none focus:ring-4 transition-all duration-200 ${
-            errors.taxPayerTypeId
-              ? "border-red-400 focus:ring-red-500/20 focus:border-red-500 bg-red-50"
-              : "border-gray-200 focus:ring-blue-500/20 focus:border-blue-500 hover:border-blue-300"
+          className={`${inputBase} ${
+            errors.taxPayerTypeId ? inputError : inputNormal
           }`}
           disabled={loading}
         >
@@ -257,21 +249,19 @@ const TaxPayerForm = ({
           ))}
         </select>
         {errors.taxPayerTypeId && (
-          <p className="flex items-center gap-2 text-sm text-red-600 font-medium" role="alert">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-            </svg>
+          <p className="mt-1.5 flex items-center gap-1.5 text-sm text-red-600" role="alert">
+            <AlertCircle className="h-4 w-4" />
             {errors.taxPayerTypeId}
           </p>
         )}
       </div>
 
-      <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
+      <div className="flex justify-end gap-3 pt-6 border-t border-slate-200">
         <button
           type="button"
           onClick={onCancel}
           disabled={loading}
-          className="px-6 py-3 text-sm font-semibold text-gray-700 bg-white border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-4 focus:ring-gray-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm hover:shadow-md"
+          className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 hover:border-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/40 disabled:pointer-events-none disabled:opacity-50"
         >
           Cancelar
         </button>
@@ -284,31 +274,13 @@ const TaxPayerForm = ({
             !formData.status ||
             !formData.taxPayerTypeId
           }
-          className="px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 border border-transparent rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-4 focus:ring-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-95"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 active:scale-[.98] disabled:pointer-events-none disabled:opacity-50"
         >
           {loading ? (
-            <div className="flex items-center">
-              <svg
-                className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
+            <>
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
               {isEditing ? "Actualizando..." : "Creando..."}
-            </div>
+            </>
           ) : isEditing ? (
             "Actualizar"
           ) : (

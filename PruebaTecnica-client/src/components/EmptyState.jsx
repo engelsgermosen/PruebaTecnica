@@ -1,45 +1,28 @@
+import { Search, FolderOpen } from "lucide-react";
+
 const EmptyState = ({ searchTerm, title }) => {
   const isSearchResult = Boolean(searchTerm);
+  const Icon = isSearchResult ? Search : FolderOpen;
 
   return (
-    <div className="flex flex-col items-center justify-center p-16 bg-linear-to-br from-white to-blue-50/30 rounded-2xl border-2 border-dashed border-blue-200 my-8">
-      <div className="p-6 bg-linear-to-br from-blue-100 to-indigo-100 rounded-full mb-6 shadow-lg">
-        <svg
-          className="h-16 w-16 text-blue-600"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          {isSearchResult ? (
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          ) : (
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-            />
-          )}
-        </svg>
-      </div>
-      <h3 className="text-2xl font-bold text-gray-900 mb-3">
-        {title ? title : isSearchResult  
-          ? "🔍 No se encontraron contribuyentes"
-          : "📁 No hay contribuyentes disponibles"}
+    <div className="flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white py-12 sm:py-16 shadow-sm my-8">
+      <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+        <Icon className="h-7 w-7" aria-hidden="true" />
+      </span>
+      <h3 className="mt-4 text-base font-semibold text-slate-900">
+        {title
+          ? title
+          : isSearchResult
+          ? "No se encontraron contribuyentes"
+          : "No hay contribuyentes disponibles"}
       </h3>
-      <p className="text-gray-600 text-center max-w-md text-lg">
+      <p className="mt-1 max-w-md text-center text-sm text-slate-500">
         {isSearchResult
           ? "Intenta con otros términos de búsqueda o verifica que la información sea correcta."
           : "Aún no hay contribuyentes registrados en el sistema."}
       </p>
       {searchTerm && (
-        <div className="mt-4 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-medium">
+        <div className="mt-4 rounded-lg bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700">
           Búsqueda: "{searchTerm}"
         </div>
       )}

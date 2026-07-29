@@ -6,7 +6,7 @@ import EmptyState from "./EmptyState";
 const TaxPayerList = ({ taxPayers, loading, error, searchTerm }) => {
   return (
     <section
-      className="bg-white rounded-lg shadow-sm border border-gray-200"
+      className="bg-white rounded-2xl shadow-sm border border-slate-200"
       aria-labelledby="taxpayer-list-heading"
     >
       <h2 id="taxpayer-list-heading" className="sr-only">
@@ -20,21 +20,21 @@ const TaxPayerList = ({ taxPayers, loading, error, searchTerm }) => {
       ) : taxPayers.length === 0 ? (
         <EmptyState searchTerm={searchTerm} />
       ) : (
-        <div className="overflow-hidden">
+        <div className="overflow-hidden rounded-2xl">
           {/* Header de la tabla */}
-          <header className="bg-gray-50 px-6 py-3 border-b border-gray-200">
+          <header className="bg-white px-6 py-3 border-b border-slate-200">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <div className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                 RNC/Identificación
               </div>
-              <div className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <div className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                 Nombre del Contribuyente
               </div>
             </div>
           </header>
 
           {/* Contenido de la tabla */}
-          <div className="divide-y divide-gray-200" role="list">
+          <div className="divide-y divide-slate-200" role="list">
             {taxPayers.map((taxPayer, index) => (
               <TaxPayerCard
                 key={taxPayer.rncIdentification}

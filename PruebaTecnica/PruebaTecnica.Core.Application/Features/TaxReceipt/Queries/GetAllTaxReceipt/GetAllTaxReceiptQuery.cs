@@ -44,7 +44,8 @@ namespace PruebaTecnica.Core.Application.Features.TaxReceipt.Queries.GetAllTaxRe
 
         private async Task<PagedResponse<TaxReceiptDto>> QueryTaxReceiptsAsync(GetAllTaxReceiptQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Domain.Entities.TaxReceipt> query = _taxReceiptRepository.GetQuery();
+            IQueryable<Domain.Entities.TaxReceipt> query = _taxReceiptRepository.GetQuery()
+                .Include(x => x.Details);
 
             if (!string.IsNullOrWhiteSpace(request.RncIdentification))
             {

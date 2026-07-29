@@ -11,6 +11,7 @@ import { Plus, AlertCircle } from "lucide-react";
 import TaxReceiptForm from "./TaxReceiptForm";
 import { toast } from "sonner";
 import useApi from "@/lib/axiosClient";
+import { formatDOP } from "../utils/currency";
 
 
 const TaxReceiptModal = ({ onTaxReceiptCreated }) => {
@@ -27,13 +28,17 @@ const TaxReceiptModal = ({ onTaxReceiptCreated }) => {
       const response = await api.post(`/taxreceipts`,formData);
 
       if(response.status === 201){
-        if(onTaxReceiptCreated){
-          setOpen(false);
-          setError("");
-          onTaxReceiptCreated();
-          toast.success("Comprobante creado exitosamente");
-          return;
-        }
+        // La fuente de verdad de los montos es la respuesta del servidor.
+        const created = response.data;
+        setOpen(false);
+        setError("");
+        if (onTaxReceiptCreated) onTaxReceiptCreated(created);
+        toast.success(
+          created?.total != null
+            ? `Comprobante ${created.ncf} creado — Total: ${formatDOP(created.total)}`
+            : "Comprobante creado exitosamente"
+        );
+        return;
       }
       else{
         setOpen(false);
@@ -43,7 +48,12 @@ const TaxReceiptModal = ({ onTaxReceiptCreated }) => {
       // Cerrar modal y resetear estados
       
     } catch (err) {
-      setError(err.response?.data?.detail || "Error al crear el comprobante fiscal");
+      if (err.response?.status === 409) {
+        // Contención de concurrencia al generar el NCF (no es un duplicado).
+        setError("No se pudo generar el comprobante, reintente.");
+      } else {
+        setError(err.response?.data?.detail || "Error al crear el comprobante fiscal");
+      }
     } finally {
       setLoading(false);
     }

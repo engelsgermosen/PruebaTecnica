@@ -159,7 +159,7 @@ export default function TaxReceiptList({ showCreateButton = false, }) {
                               {new Intl.NumberFormat("es-DO", {
                                 style: "currency",
                                 currency: "DOP"
-                              }).format(item.amount + item.itbis18)}
+                              }).format(item.total != null ? item.total : item.amount + item.itbis18)}
                             </p>
                           </div>
                         </div>

@@ -39,6 +39,7 @@ namespace PruebaTecnica.Infrastructure.Persistence
             services.AddTransient<ITaxPayerTypeRepository, TaxPayerTypeRepository>();
             services.AddTransient<ITaxReceiptRepository, TaxReceiptRepository>();
             services.AddTransient<INcfSequenceRepository, NcfSequenceRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
             services.AddSingleton<ILogWriter, LogWriter>();
 
 
@@ -76,8 +77,17 @@ namespace PruebaTecnica.Infrastructure.Persistence
                     var services = scope.ServiceProvider;
 
                     var taxPayerTypeRepository = services.GetRequiredService<ITaxPayerTypeRepository>();
-
                     await DefaultTaxPayerTypes.RunTaxPayerTypeSeedAsync(taxPayerTypeRepository);
+
+                    var productRepository = services.GetRequiredService<IProductRepository>();
+                    await DefaultProducts.RunProductSeedAsync(productRepository);
+
+                    var taxPayerRepository = services.GetRequiredService<ITaxPayerRepository>();
+                    await DefaultTaxPayers.RunTaxPayerSeedAsync(taxPayerRepository, taxPayerTypeRepository);
+
+                    var dbContext = services.GetRequiredService<ApplicationDbContext>();
+                    var ncfSequenceRepository = services.GetRequiredService<INcfSequenceRepository>();
+                    await DefaultTaxReceipts.RunTaxReceiptSeedAsync(dbContext, ncfSequenceRepository);
                 }
             }
             catch

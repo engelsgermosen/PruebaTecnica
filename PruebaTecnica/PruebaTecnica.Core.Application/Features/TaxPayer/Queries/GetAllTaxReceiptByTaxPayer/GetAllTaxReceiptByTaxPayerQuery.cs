@@ -28,7 +28,8 @@ namespace PruebaTecnica.Core.Application.Features.TaxPayer.Queries.GetAllTaxRece
             var taxPayer = await _taxPayerRepository
                 .GetQuery()
                 .Include(x => x.TaxPayerType)
-                .Include(x => x.TaxReceipts)
+                .Include(x => x.TaxReceipts)!
+                    .ThenInclude(r => r.Details)
                 .FirstOrDefaultAsync(x => x.Id == request.RncIdentification, cancellationToken);
 
             if (taxPayer == null)

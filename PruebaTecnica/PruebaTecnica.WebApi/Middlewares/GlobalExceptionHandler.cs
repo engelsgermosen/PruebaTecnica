@@ -1,34 +1,114 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using PruebaTecnica.Core.Application.Exceptions;
 using PruebaTecnica.Core.Application.Interfaces.Services;
 using PruebaTecnica.Core.Domain.Entities;
+using System.Diagnostics;
 using System.Net;
 using System.Security.Claims;
 
 namespace PruebaTecnica.WebApi.Middlewares
 {
-    public class GlobalExceptionHandler: IExceptionHandler
+    public class GlobalExceptionHandler : IExceptionHandler
     {
         private readonly ILogWriter _logWriter;
-        public GlobalExceptionHandler(ILogWriter logWriter) => _logWriter = logWriter;
-        
+        private readonly ILogger<GlobalExceptionHandler> _logger;
+
+        public GlobalExceptionHandler(ILogWriter logWriter, ILogger<GlobalExceptionHandler> logger)
+        {
+            _logWriter = logWriter;
+            _logger = logger;
+        }
+
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
-            string exceptionTitle = "Internal Server Error";
-            string details = exception.Message;
-
             var endpoint = httpContext.Request.Path.Value;
             var userId = httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var traceId = Activity.Current?.Id ?? httpContext.TraceIdentifier;
 
-            var log = new Log()
+            // Mapea el tipo de excepcion -> (status, nivel de log, titulo/detalle para el cliente).
+            int statusCode;
+            LogLevel logLevel;
+            string title;
+            string? detail;
+
+            switch (exception)
             {
-                Level = "Error",
+                case ValidationException validation:
+                    statusCode = StatusCodes.Status400BadRequest;
+                    logLevel = LogLevel.Information;
+                    title = "Bad Request";
+                    detail = validation.Errors.Count > 0
+                        ? string.Join(", ", validation.Errors)
+                        : validation.Message;
+                    break;
+
+                case UnauthorizedException:
+                    statusCode = StatusCodes.Status401Unauthorized;
+                    logLevel = LogLevel.Information;
+                    title = "Unauthorized";
+                    detail = exception.Message;
+                    break;
+
+                case NotFoundException:
+                    statusCode = StatusCodes.Status404NotFound;
+                    logLevel = LogLevel.Information;
+                    title = "Not Found";
+                    detail = exception.Message;
+                    break;
+
+                case KeyNotFoundException:
+                    statusCode = StatusCodes.Status404NotFound;
+                    logLevel = LogLevel.Information;
+                    title = "Not Found";
+                    detail = exception.Message;
+                    break;
+
+                // ApiException base: respeta su ErrorCode (401/403/500/...); default 400.
+                case ApiException api:
+                    statusCode = (api.ErrorCode >= 400 && api.ErrorCode < 600)
+                        ? api.ErrorCode
+                        : StatusCodes.Status400BadRequest;
+                    logLevel = statusCode >= 500 ? LogLevel.Error : LogLevel.Warning;
+                    title = ((HttpStatusCode)statusCode).ToString();
+                    detail = exception.Message;
+                    break;
+
+                default:
+                    statusCode = StatusCodes.Status500InternalServerError;
+                    logLevel = LogLevel.Error;
+                    title = "Internal Server Error";
+                    detail = exception.Message;
+                    break;
+            }
+
+            bool isServerError = statusCode >= 500;
+
+            // Solo los 500 se loguean con el objeto Exception (stack trace).
+            // Los esperados: mensaje estructurado, sin trace.
+            if (isServerError)
+            {
+                _logger.LogError(exception,
+                    "Unhandled exception on {Endpoint} (traceId {TraceId}): {Message}",
+                    endpoint, traceId, exception.Message);
+            }
+            else
+            {
+                _logger.Log(logLevel,
+                    "Handled {ExceptionType} on {Endpoint} -> {StatusCode} (traceId {TraceId}): {Message}",
+                    exception.GetType().Name, endpoint, statusCode, traceId, exception.Message);
+            }
+
+            // Persistencia en la tabla [Logs] (sink existente, ILogWriter). Se conserva.
+            var log = new Log
+            {
+                Level = logLevel.ToString(),
                 Message = exception.Message,
-                Detail = exception.ToString(),
+                Detail = isServerError ? exception.ToString() : exception.Message,
                 User = userId,
                 Endpoint = endpoint
-            };  
+            };
 
             try
             {
@@ -39,62 +119,17 @@ namespace PruebaTecnica.WebApi.Middlewares
                 // si el log falla (BD caida), la respuesta de error debe llegar igual al cliente
             }
 
-            switch (exception)
-            {
-                case ApiException e:
-                    switch (e.ErrorCode)
-                    {
-                        case (int)HttpStatusCode.BadRequest:
-                            exceptionTitle = "Bad request";
-                            httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                            break;
-                        case (int)HttpStatusCode.NotFound:
-                            exceptionTitle = "Not found";
-                            httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                            break;
-                        case (int)HttpStatusCode.Conflict:
-                            exceptionTitle = "Conflict";
-                            httpContext.Response.StatusCode = (int)HttpStatusCode.Conflict;
-                            break;
-                        case (int)HttpStatusCode.Unauthorized:
-                            exceptionTitle = "Unauthorized";
-                            httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                            break;
-                        default:
-                            if (e.ErrorCode >= 400 && e.ErrorCode < 600)
-                            {
-                                exceptionTitle = ((HttpStatusCode)e.ErrorCode).ToString();
-                                httpContext.Response.StatusCode = e.ErrorCode;
-                            }
-                            else
-                            {
-                                httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                            }
-                            break;
-                    }
-                break;
-                case ValidationException e:
-                    exceptionTitle = "Bad Request";
-                    details = ((ValidationException)exception).Errors.Aggregate((a, b) => a + ", " + b);
-                    httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-                break;
-                case KeyNotFoundException e:
-                    exceptionTitle = "Not Found";
-                    httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-                break;
-                default:
-                    httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                break;
-            }
-
+            // Solo los 500 devuelven titulo/detalle generico; los demas devuelven el mensaje real.
             var problemDetails = new ProblemDetails
             {
-                Title = exceptionTitle,
-                Detail = details,
-                Status = httpContext.Response.StatusCode,
+                Title = isServerError ? "Error interno" : title,
+                Detail = isServerError ? "Ocurrió un error interno procesando la solicitud." : detail,
+                Status = statusCode,
                 Instance = httpContext.Request.Path
             };
+            problemDetails.Extensions["traceId"] = traceId;
 
+            httpContext.Response.StatusCode = statusCode;
             await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
             return true;
         }

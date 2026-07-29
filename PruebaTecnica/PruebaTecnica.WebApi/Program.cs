@@ -8,8 +8,21 @@ using PruebaTecnica.Infrastructure.Persistence.Contexts;
 using PruebaTecnica.Infrastructure.Shared;
 using PruebaTecnica.WebApi.Extensions;
 using PruebaTecnica.WebApi.Middlewares;
+using Serilog;
+using Serilog.Formatting.Compact;
+using System.Diagnostics;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Serilog: lee niveles de configuracion (seccion "Serilog"), enriquece con LogContext
+// y escribe JSON compacto a stdout (lo que lee `docker compose logs`).
+builder.Host.UseSerilog((context, services, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext()
+    .WriteTo.Console(new CompactJsonFormatter()));
+
 // Add services to the container.
 builder.Services.AddControllers(opt =>
 {
@@ -71,15 +84,27 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/error");
     app.UseHsts();
 }
-app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
 app.UseCors("Front");
 app.UseRouting();
+
+// Una linea por request (metodo, ruta, status, ms). Va despues de UseRouting
+// para tener metadata de endpoint, y ENVUELVE al UseExceptionHandler (queda por
+// fuera) para que las excepciones ya manejadas no re-adjunten stack al request-log.
+app.UseSerilogRequestLogging(options =>
+{
+    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+    {
+        diagnosticContext.Set("TraceId", Activity.Current?.Id ?? httpContext.TraceIdentifier);
+        diagnosticContext.Set("UserId", httpContext.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "anonymous");
+    };
+});
+
+app.UseExceptionHandler();
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -20,6 +20,10 @@ namespace PruebaTecnica.Infrastructure.Persistence.Contexts
 
         public DbSet<NcfSequence> NcfSequences { get; set; } = null!;
 
+        public DbSet<Product> Products { get; set; } = null!;
+
+        public DbSet<TaxReceiptDetail> TaxReceiptDetails { get; set; } = null!;
+
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

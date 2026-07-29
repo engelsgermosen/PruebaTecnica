@@ -31,13 +31,13 @@ namespace PruebaTecnica.Infrastructure.Identity.Services
 
             if (user == null)
             {
-                throw new ApiException("Credenciales inválidas.", 401);
+                throw new UnauthorizedException("Credenciales inválidas.");
             }
 
             var result = await _userManager.CheckPasswordAsync(user, request.Password);
             if (!result)
             {
-                throw new ApiException("Credenciales inválidas.", 401);
+                throw new UnauthorizedException("Credenciales inválidas.");
             }
 
             if (!user.EmailConfirmed)

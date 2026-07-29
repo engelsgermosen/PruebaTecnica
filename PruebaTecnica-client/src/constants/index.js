@@ -38,4 +38,5 @@ export const ROUTES = {
   TAXPAYERS: '/auth/taxpayers',
   TAXPAYER_TYPES: '/auth/taxpayertypes',
   TAX_RECEIPTS: '/auth/taxreceipts',
+  PRODUCTS: '/auth/products',
 };

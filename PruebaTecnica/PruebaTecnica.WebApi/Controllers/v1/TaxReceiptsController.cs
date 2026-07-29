@@ -28,15 +28,16 @@ namespace PruebaTecnica.WebApi.Controllers.v1
 
         [HttpPost]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TaxReceiptDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [SwaggerOperation(summary: "Create a new Tax Payer",
-                          description: "Creates a new Tax Payer with the provided details.")]
+        [SwaggerOperation(summary: "Create a new Tax Receipt",
+                          description: "Creates a Tax Receipt from product detail lines. Amounts (Amount, Itbis18, Total) are computed on the server.")]
 
         public async Task<IActionResult> Create([FromBody] CreateTaxReceiptCommand command)
         {
-            await Mediator.Send(command);
-            return StatusCode(StatusCodes.Status201Created);
+            var created = await Mediator.Send(command);
+            return StatusCode(StatusCodes.Status201Created, created);
         }
 
         [HttpGet("stats/monthly")]

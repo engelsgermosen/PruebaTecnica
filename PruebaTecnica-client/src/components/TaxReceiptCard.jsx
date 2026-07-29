@@ -1,11 +1,12 @@
 import { ReceiptText, Building2, Clock } from "lucide-react";
+import { formatDOP } from "../utils/currency";
 
 const TaxReceiptCard = ({ receipt }) => {
-  const formatDOP = (value) =>
-    new Intl.NumberFormat("es-DO", {
-      style: "currency",
-      currency: "DOP",
-    }).format(value);
+  const details = Array.isArray(receipt.details) ? receipt.details : [];
+  const total =
+    receipt.total != null
+      ? receipt.total
+      : (receipt.amount || 0) + (receipt.itbis18 || 0);
 
   return (
     <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
@@ -36,12 +37,46 @@ const TaxReceiptCard = ({ receipt }) => {
         </div>
       </div>
 
+      {/* Detalle de líneas (snapshot histórico: nombre y precio guardados) */}
+      {details.length > 0 && (
+        <div className="mb-4 overflow-x-auto rounded-xl border border-slate-200">
+          <table className="w-full min-w-[480px] border-collapse text-left text-sm">
+            <thead>
+              <tr className="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                <th className="px-4 py-2.5">Producto</th>
+                <th className="px-4 py-2.5 text-right">P. Unitario</th>
+                <th className="px-4 py-2.5 text-center">Cant.</th>
+                <th className="px-4 py-2.5 text-right">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200">
+              {details.map((d) => (
+                <tr key={d.id ?? `${d.productId}-${d.productName}`}>
+                  <td className="px-4 py-2.5 font-medium text-slate-900">
+                    {d.productName}
+                  </td>
+                  <td className="px-4 py-2.5 text-right tabular-nums text-slate-600">
+                    {formatDOP(d.unitPrice)}
+                  </td>
+                  <td className="px-4 py-2.5 text-center tabular-nums text-slate-600">
+                    {d.quantity}
+                  </td>
+                  <td className="px-4 py-2.5 text-right font-semibold tabular-nums text-slate-900">
+                    {formatDOP(d.subtotal)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {/* Monto */}
         <div className="rounded-xl bg-blue-50 p-4">
           <p className="text-sm font-medium text-slate-500">Monto Base</p>
           <p className="mt-1 text-xl font-semibold text-slate-900">
-            {formatDOP(receipt.amount) || "0"}
+            {formatDOP(receipt.amount)}
           </p>
         </div>
 
@@ -57,7 +92,7 @@ const TaxReceiptCard = ({ receipt }) => {
         <div className="rounded-xl bg-emerald-50 p-4">
           <p className="text-sm font-medium text-slate-500">Total Pagado</p>
           <p className="mt-1 text-xl font-semibold text-slate-900">
-            {formatDOP((receipt.amount || 0) + (receipt.itbis18 || 0))}
+            {formatDOP(total)}
           </p>
         </div>
       </div>

@@ -3,12 +3,18 @@ import Input from "../components/Input";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { isAuthenticated } from "../middlewares/Auth";
-import { ShieldCheck, AlertCircle, Loader2 } from "lucide-react";
+import { ShieldCheck, AlertCircle, Loader2, KeyRound, Wand2 } from "lucide-react";
+
+// Credenciales de prueba (usuario semilla del backend). Se pueden desactivar
+// con VITE_DEMO_CREDENTIALS=false. Solo para entornos de demo/prueba.
+const DEMO_ENABLED = import.meta.env.VITE_DEMO_CREDENTIALS !== "false";
+const DEMO_EMAIL = import.meta.env.VITE_DEMO_EMAIL || "DefaultUser@gmail.com";
+const DEMO_PASSWORD = import.meta.env.VITE_DEMO_PASSWORD || "Pa$$word123";
 
 const Login = () => {
   const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
+    email: DEMO_ENABLED ? DEMO_EMAIL : "",
+    password: DEMO_ENABLED ? DEMO_PASSWORD : "",
   });
 
   const [error, setError] = useState("");
@@ -24,6 +30,11 @@ const Login = () => {
       ...loginData,
       [name]: value,
     });
+  };
+
+  const fillDemoCredentials = () => {
+    setLoginData({ email: DEMO_EMAIL, password: DEMO_PASSWORD });
+    setError("");
   };
 
   const handleSubmit = async (e) => {
@@ -134,6 +145,40 @@ const Login = () => {
             </button>
           </form>
         </div>
+
+        {/* Credenciales de prueba (demo) */}
+        {DEMO_ENABLED && (
+          <div className="rounded-2xl border border-blue-200 bg-blue-50/60 p-4">
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
+                <KeyRound className="h-4 w-4" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-slate-900">
+                  Credenciales de prueba
+                </p>
+                <dl className="mt-2 space-y-1 text-sm">
+                  <div className="flex items-center justify-between gap-2">
+                    <dt className="text-slate-500">Email</dt>
+                    <dd className="truncate font-mono text-slate-800">{DEMO_EMAIL}</dd>
+                  </div>
+                  <div className="flex items-center justify-between gap-2">
+                    <dt className="text-slate-500">Contraseña</dt>
+                    <dd className="font-mono text-slate-800">{DEMO_PASSWORD}</dd>
+                  </div>
+                </dl>
+                <button
+                  type="button"
+                  onClick={fillDemoCredentials}
+                  className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-white px-3 py-1.5 text-xs font-semibold text-blue-700 transition-colors hover:bg-blue-50"
+                >
+                  <Wand2 className="h-3.5 w-3.5" />
+                  Autocompletar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Footer del login */}
         <p className="text-center text-sm text-slate-500">

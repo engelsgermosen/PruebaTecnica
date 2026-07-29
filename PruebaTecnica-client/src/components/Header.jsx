@@ -10,7 +10,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from "./ui/dropdown-menu";
-import { LayoutDashboard, Users, ReceiptText, Tags, LogOut } from "lucide-react";
+import {
+  LayoutDashboard,
+  Users,
+  ReceiptText,
+  Package,
+  Tags,
+  LogOut,
+} from "lucide-react";
 // Se importa el asset para que Vite lo emita con hash en el build de produccion.
 // La ruta "/src/assets/..." solo existe en el servidor de desarrollo.
 import logo from "../assets/Logo.png";
@@ -19,6 +26,7 @@ const navItems = [
   { to: "/auth/dashboard", label: "Panel", icon: LayoutDashboard },
   { to: "/auth/taxpayers", label: "Contribuyentes", icon: Users },
   { to: "/auth/taxreceipts", label: "Comprobantes", icon: ReceiptText },
+  { to: "/auth/products", label: "Productos", icon: Package },
   { to: "/auth/taxpayertypes", label: "Tipos", icon: Tags },
 ];
 

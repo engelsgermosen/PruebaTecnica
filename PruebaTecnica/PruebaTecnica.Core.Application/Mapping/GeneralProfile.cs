@@ -1,15 +1,17 @@
 using AutoMapper;
 using PruebaTecnica.Core.Domain.Entities;
 using PruebaTecnica.Core.Application.Dtos.Auth;
+using PruebaTecnica.Core.Application.Dtos.Product;
 using PruebaTecnica.Core.Application.Dtos.TaxPayer;
 using PruebaTecnica.Core.Application.Dtos.TaxPayerType;
 using PruebaTecnica.Core.Application.Dtos.TaxReceipt;
 using PruebaTecnica.Core.Application.Features.Auth.Commands.Login;
+using PruebaTecnica.Core.Application.Features.Product.Commands.CreateProduct;
+using PruebaTecnica.Core.Application.Features.Product.Commands.UpdateProduct;
 using PruebaTecnica.Core.Application.Features.TaxPayer.Commands.CreateTaxPayer;
 using PruebaTecnica.Core.Application.Features.TaxPayer.Commands.UpdateTaxPayer;
 using PruebaTecnica.Core.Application.Features.TaxPayerType.Commands.CreateTaxPayerType;
 using PruebaTecnica.Core.Application.Features.TaxPayerType.Commands.UpdateTaxPayerType;
-using PruebaTecnica.Core.Application.Features.TaxReceipt.Commands.CreateTaxReceipt;
 
 namespace PruebaTecnica.Core.Application.Mapping
 {
@@ -95,29 +97,9 @@ namespace PruebaTecnica.Core.Application.Mapping
 
             #endregion
 
-            #region TaxPayerReceipt
+            #region TaxReceipt
 
-            CreateMap<CreateTaxReceiptCommand, TaxReceipt>()
-            .ForMember(x => x.TaxPayer, opt => opt.Ignore())
-            .ForMember(x => x.Id, opt => opt.Ignore())
-            .ForMember(x => x.Ncf, opt => opt.Ignore())
-            .ForMember(x => x.Itbis18, opt => opt.Ignore())
-            .ForMember(x => x.CreatedAt, opt => opt.Ignore())
-            .ForMember(x => x.CreatedBy, opt => opt.Ignore())
-            .ForMember(x => x.UpdatedAt, opt => opt.Ignore())
-            .ForMember(x => x.UpdatedBy, opt => opt.Ignore())
-            .ReverseMap();
-
-            // CreateMap<UpdateTaxReceiptCommand, TaxReceipt>()
-            // .ForMember(x => x.TaxPayer, opt => opt.Ignore())
-            // .ForMember(x => x.RncIdentification, opt => opt.Ignore())
-            // .ForMember(x => x.Ncf, opt => opt.Ignore())
-            // .ForMember(x => x.Itbis18, opt => opt.Ignore())
-            // .ForMember(x => x.CreatedAt, opt => opt.Ignore())
-            // .ForMember(x => x.CreatedBy, opt => opt.Ignore())
-            // .ForMember(x => x.UpdatedAt, opt => opt.Ignore())
-            // .ForMember(x => x.UpdatedBy, opt => opt.Ignore())
-            // .ReverseMap();
+            CreateMap<TaxReceiptDetail, TaxReceiptDetailDto>().ReverseMap();
 
             CreateMap<TaxReceipt, TaxReceiptDto>()
             .ReverseMap()
@@ -128,8 +110,26 @@ namespace PruebaTecnica.Core.Application.Mapping
 
             #endregion
 
+            #region Product
 
+            CreateMap<CreateProductCommand, Product>()
+            .ForMember(x => x.Id, opt => opt.Ignore())
+            .ForMember(x => x.CreatedAt, opt => opt.Ignore())
+            .ForMember(x => x.CreatedBy, opt => opt.Ignore())
+            .ForMember(x => x.UpdatedAt, opt => opt.Ignore())
+            .ForMember(x => x.UpdatedBy, opt => opt.Ignore())
+            .ReverseMap();
 
+            CreateMap<UpdateProductCommand, Product>()
+            .ForMember(x => x.CreatedAt, opt => opt.Ignore())
+            .ForMember(x => x.CreatedBy, opt => opt.Ignore())
+            .ForMember(x => x.UpdatedAt, opt => opt.Ignore())
+            .ForMember(x => x.UpdatedBy, opt => opt.Ignore())
+            .ReverseMap();
+
+            CreateMap<Product, ProductDto>().ReverseMap();
+
+            #endregion
 
         }
     }

@@ -4,5 +4,6 @@ namespace PruebaTecnica.Core.Application.Cache
     {
         public const string TaxPayers = "taxpayers";
         public const string TaxReceipts = "taxreceipts";
+        public const string Products = "products";
     }
 }

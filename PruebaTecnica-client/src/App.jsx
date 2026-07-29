@@ -9,6 +9,7 @@ import TaxPayer from "./pages/TaxPayer";
 import TaxPayerAuth from "./pages/auth/TaxPayer";
 import TaxPayerType from "./pages/auth/TaxPayerType";
 import TaxReceipt from "./pages/auth/TaxReceipt";
+import Products from "./pages/auth/Products";
 import Dashboard from "./pages/auth/Dashboard";
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
               <Route path="/auth/taxpayertypes" element={<TaxPayerType />} />
               <Route path="/auth/taxpayers" element={<TaxPayerAuth />} />
               <Route path="/auth/taxreceipts" element={<TaxReceipt />} />
+              <Route path="/auth/products" element={<Products />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

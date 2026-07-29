@@ -5,8 +5,10 @@ services:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: ${SA_PASSWORD}
       MSSQL_PID: Developer
-    ports:
-      - "1433:1433"
+    # Sin mapeo al host para evitar conflictos con SQL Server local.
+    # Descomenta si quieres conectarte con SSMS.
+    #ports:
+    #  - "1433:1433"
     volumes:
       - sqldata:/var/opt/mssql
     healthcheck:
@@ -23,8 +25,8 @@ services:
   redis:
     image: redis:7-alpine
     command: ["redis-server", "--appendonly", "yes"]
-    ports:
-      - "6379:6379"
+    #ports:
+    #  - "6379:6379"
     volumes:
       - redisdata:/data
     healthcheck:

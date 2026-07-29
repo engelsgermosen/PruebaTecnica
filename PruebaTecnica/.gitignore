@@ -34,7 +34,6 @@ TestResults/
 # ============================================
 # Entity Framework / Migrations / SQLite
 # ============================================
-Migrations/
 *.sqlite
 *.db
 *.mdf

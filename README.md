@@ -13,7 +13,18 @@ Aplicación web y API para consultar contribuyentes y sus comprobantes fiscales,
 ```bash
 git clone https://github.com/engelsgermosen/PruebaTecnica.git
 cd PruebaTecnica
-cp .env.example .env
+```
+
+Copiar el archivo de variables de entorno:
+
+```bash
+cp .env.example .env          # macOS, Linux, PowerShell
+copy .env.example .env        # Windows CMD
+```
+
+Levantar todo:
+
+```bash
 docker compose up -d --build
 ```
 
